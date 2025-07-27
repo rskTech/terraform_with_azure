@@ -72,6 +72,7 @@ az version
 1. On your local system or Azure Cloud Shell, run:
 
 ```bash
+az login
 az ad sp create-for-rbac --name "terraform-sp" --role="Contributor" \
   --scopes="/subscriptions/<your-subscription-id>"
 ```
