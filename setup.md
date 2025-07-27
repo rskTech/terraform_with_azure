@@ -1,21 +1,34 @@
-🚀 Terraform Setup on Linux VM (EC2) for Azure Infrastructure Provisioning
-This document provides a step-by-step guide to install Terraform on a Linux VM (Ubuntu/Amazon Linux), configure Azure credentials, and prepare the system to provision Azure services using Terraform.
+# Terraform Setup on Linux VM (EC2) for Azure Infrastructure
 
-🧰 Prerequisites
-A running Linux VM (Ubuntu or Amazon Linux 2) with SSH access.
+This guide will help you set up Terraform on a Linux VM (Ubuntu or Amazon Linux), configure Azure credentials, and use Terraform to create resources in Azure.
 
-An Azure account and Service Principal created.
+---
 
-Basic understanding of Terraform.
+## ✅ Prerequisites
 
-🖥️ 1. Connect to Linux VM
-SSH into your EC2 or other Linux VM:
+* A running **Linux VM (EC2 or any cloud)** with internet access
+* An **Azure subscription**
+* Terraform-compatible **Azure Service Principal**
 
-ssh -i your-key.pem ec2-user@<your-ec2-ip>
-For Ubuntu, replace ec2-user with ubuntu.
+---
 
-🛠️ 2. Install Terraform
-On Ubuntu:
+## 🔐 1. Connect to Your Linux VM
+
+SSH into your VM:
+
+```bash
+ssh -i your-key.pem ec2-user@<your-ec2-public-ip>
+```
+
+> Replace `ec2-user` with `ubuntu` for Ubuntu machines.
+
+---
+
+## 🧰 2. Install Terraform
+
+### On Ubuntu:
+
+```bash
 sudo apt-get update -y
 sudo apt-get install -y gnupg software-properties-common curl
 curl -fsSL https://apt.releases.hashicorp.com/gpg | \
@@ -29,55 +42,85 @@ sudo apt update
 sudo apt install terraform -y
 
 terraform -version
-On Amazon Linux:
+```
+
+### On Amazon Linux:
+
+```bash
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum install terraform -y
 
 terraform -version
-☁️ 3. Install Azure CLI
+```
+
+---
+
+## ☁️ 3. Install Azure CLI
+
+```bash
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az version
-🔐 4. Authenticate with Azure
-Option 1: Use a Service Principal (recommended for automation)
-a. On your local machine (or Azure Cloud Shell), create a Service Principal:
+```
+
+---
+
+## 🔑 4. Create and Configure Azure Credentials
+
+### Option A: Use Azure Service Principal (Recommended)
+
+1. On your local system or Azure Cloud Shell, run:
+
+```bash
 az ad sp create-for-rbac --name "terraform-sp" --role="Contributor" \
   --scopes="/subscriptions/<your-subscription-id>"
-This command outputs:
+```
 
+This will output:
+
+```json
 {
-  "appId": "xxxxx-xxxx-xxxx",
+  "appId": "xxxxxx",
   "displayName": "terraform-sp",
-  "password": "xxxxx-xxxxx",
-  "tenant": "xxxxx-xxxx-xxxx"
+  "password": "xxxxxx",
+  "tenant": "xxxxxx"
 }
-b. On the Linux VM, export these as environment variables:
+```
+
+2. On your Linux VM, export these credentials:
+
+```bash
 export ARM_CLIENT_ID="<appId>"
 export ARM_CLIENT_SECRET="<password>"
 export ARM_SUBSCRIPTION_ID="<subscriptionId>"
 export ARM_TENANT_ID="<tenant>"
-Add them to ~/.bashrc for persistence:
+```
 
-echo 'export ARM_CLIENT_ID="..."' >> ~/.bashrc
-echo 'export ARM_CLIENT_SECRET="..."' >> ~/.bashrc
-echo 'export ARM_SUBSCRIPTION_ID="..."' >> ~/.bashrc
-echo 'export ARM_TENANT_ID="..."' >> ~/.bashrc
+> To persist across reboots, add them to `~/.bashrc`:
+
+```bash
+echo 'export ARM_CLIENT_ID="<appId>"' >> ~/.bashrc
+echo 'export ARM_CLIENT_SECRET="<password>"' >> ~/.bashrc
+echo 'export ARM_SUBSCRIPTION_ID="<subscriptionId>"' >> ~/.bashrc
+echo 'export ARM_TENANT_ID="<tenant>"' >> ~/.bashrc
 source ~/.bashrc
-📂 5. Clone Terraform Project and Initialize
-git clone https://github.com/<your-username>/azure-terraform-infra.git
-cd azure-terraform-infra
-Initialize the Terraform backend and provider:
+```
 
+---
+
+## 📁 5. Clone Terraform Project and Deploy Azure Resources
+
+```bash
+git clone https://github.com/rskTech/terraform_with_azure.git
+cd terraform_with_azure
+```
+
+Then run:
+
+```bash
 terraform init
 terraform plan
 terraform apply
-📌 Notes
-Avoid committing terraform.tfvars or credentials to Git.
+```
 
-You can also use Terraform Cloud for state storage and remote execution.
-
-✅ Example Terraform Provider Block
-provider "azurerm" {
-  features {}
-}
-Terraform automatically picks up the Azure environment variables (ARM_*) for authentication.
+You can now provision Azure infrastructure securely from your Linux-based Terraform Dev VM. 🎉
