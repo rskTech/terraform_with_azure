@@ -72,40 +72,25 @@ az version
 1. On your local system or Azure Cloud Shell, run:
 
 ```bash
-az login
-az ad sp create-for-rbac --name "terraform-sp" --role="Contributor" \
-  --scopes="/subscriptions/<your-subscription-id>"
+az login --use-device-code"
 ```
 
-This will output:
-
-```json
-{
-  "appId": "xxxxxx",
-  "displayName": "terraform-sp",
-  "password": "xxxxxx",
-  "tenant": "xxxxxx"
-}
+Azure CLI responds with something like this:
 ```
-
-2. On your Linux VM, export these credentials:
-
-```bash
-export ARM_CLIENT_ID="<appId>"
-export ARM_CLIENT_SECRET="<password>"
-export ARM_SUBSCRIPTION_ID="<subscriptionId>"
-export ARM_TENANT_ID="<tenant>"
+To sign in, use a web browser to open the page https://microsoft.com/devicelogin 
+and enter the code ABCDEFGHI to authenticate.
 ```
+Share this code with ME
 
-> To persist across reboots, add them to `~/.bashrc`:
+What happenes:
 
-```bash
-echo 'export ARM_CLIENT_ID="<appId>"' >> ~/.bashrc
-echo 'export ARM_CLIENT_SECRET="<password>"' >> ~/.bashrc
-echo 'export ARM_SUBSCRIPTION_ID="<subscriptionId>"' >> ~/.bashrc
-echo 'export ARM_TENANT_ID="<tenant>"' >> ~/.bashrc
-source ~/.bashrc
-```
+The student shares that device code (ABCDEFGHI) with you.
+
+You, as the account owner, go to that URL (https://microsoft.com/devicelogin) and enter that code.
+
+You approve the login on your Azure account.
+
+The student’s CLI session is now authenticated as you, but only until the token expires (usually 1 hour to 24 hours depending on settings).
 
 ---
 
