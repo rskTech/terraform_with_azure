@@ -45,18 +45,17 @@ Sensitive information (like passwords, secrets, etc.)
 
 ⚠️ Important: Never manually edit or commit terraform.tfstate to GitHub — it may contain sensitive data.
 
-🏠 Local vs 🌐 Remote State Storage
-🏠 Local State
+## 🏠 Local State
 
 By default, Terraform saves the state file locally in your project directory.
 
-## Advantages:
+### Advantages:
 
 Simple setup
 
 No additional configuration
 
-Disadvantages:
+### Disadvantages:
 
 Not suitable for teams (no shared state)
 
@@ -86,7 +85,7 @@ Remote state allows multiple users to share a single state securely using backen
 
 - Consul
 
-Advantages:
+### Advantages:
 
 Enables team collaboration
 
