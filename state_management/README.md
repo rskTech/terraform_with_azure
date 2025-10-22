@@ -229,3 +229,13 @@ key = "student2.tfstate"
 ```
 
 Each student runs Terraform independently but shares the same Azure backend.
+
+## Summary
+
+| Concept          | Description                                                       |
+| ---------------- | ----------------------------------------------------------------- |
+| **State**        | Tracks real-world resources managed by Terraform                  |
+| **Local State**  | Stored on disk, suitable for single user                          |
+| **Remote State** | Stored in Azure/AWS/GCP; supports team use                        |
+| **Locking**      | Prevents multiple simultaneous changes                            |
+| **Consistency**  | Ensures Terraform always works on the latest known infrastructure |
