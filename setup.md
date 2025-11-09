@@ -72,7 +72,11 @@ az version
 1. On your local system or Azure Cloud Shell, run:
 
 ```bash
-az login --use-device-code"
+az login --use-device-code
+```
+```
+az account show
+export ARM_SUBSCRIPTION_ID=""
 ```
 
 Azure CLI responds with something like this:
